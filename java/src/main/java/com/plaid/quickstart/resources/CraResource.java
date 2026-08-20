@@ -80,7 +80,7 @@ public class CraResource {
   // https://plaid.com/docs/check/api/#cracheck_reportpdfget
   @GET
   @Path("/get_income_insights")
-  public Map getIncomeInsigts() throws IOException {
+  public Map getIncomeInsights() throws IOException {
     CraCheckReportIncomeInsightsGetRequest request = new CraCheckReportIncomeInsightsGetRequest();
     // Use user_token if available, otherwise use user_id
     if (QuickstartApplication.userToken != null) {
@@ -114,7 +114,7 @@ public class CraResource {
   // https://plaid.com/docs/check/api/#cracheck_reportpartner_insightsget
   @GET
   @Path("/get_partner_insights")
-  public CraCheckReportPartnerInsightsGetResponse getPartnerInsigts() throws IOException {
+  public CraCheckReportPartnerInsightsGetResponse getPartnerInsights() throws IOException {
     CraCheckReportPartnerInsightsGetRequest request = new CraCheckReportPartnerInsightsGetRequest();
     // Use user_token if available, otherwise use user_id
     if (QuickstartApplication.userToken != null) {
