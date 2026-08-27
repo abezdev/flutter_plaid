@@ -147,16 +147,26 @@ const App = () => {
     init();
   }, [dispatch, generateToken, generateUserToken, getInfo]);
 
+  const simpleTransactionCall = async () => {
+
+    const response = await fetch("/api/transactions", { method: "GET" });
+    const data = await response.json();
+    console.log(`Simple Transaction Call Response: ${JSON.stringify(data)}`);
+  }
+
   return (
     <div className={styles.App}>
       <div className={styles.container}>
         <Header />
+        
         {linkSuccess && (
           <>
             <Products />
             {!isPaymentInitiation && itemId && <Items />}
           </>
         )}
+        <button onClick={simpleTransactionCall}>Simple Transaction</button>
+
       </div>
     </div>
   );
