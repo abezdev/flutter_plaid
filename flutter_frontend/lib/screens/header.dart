@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/services/api_service.dart';
-import 'package:flutter_frontend/services/plaid_service.dart';
 
 import '../state/quickstart_provider.dart';
 import 'plaid_link.dart';
@@ -12,8 +11,7 @@ class HeaderView extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = QuickstartProvider.of(context);
     final apiService = ApiService();
-    // final plaidService = PlaidService(apiService: apiService);
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -44,27 +42,17 @@ class HeaderView extends StatelessWidget {
                   linkToken: linkToken, 
                   linkSuccess: true);
               }
-
               print('INFO: $data');
+
+              
             } catch (e) {
               print('Info error: $e');
             }
           },
-          icon: const Icon(Icons.token),
+          icon: const Icon(Icons.info_outline),
           label: const Text('createLinkToken'),
         ),
         PlaidLinkView(),
-        // FilledButton.icon(
-        //   onPressed: () async {
-        //     try {
-        //       await plaidService.openPlaidLink();
-        //     } catch (e) {
-        //       print('Link token error: $e');
-        //     }
-        //   },
-        //   icon: const Icon(Icons.token),
-        //   label: const Text('create link token'),
-        // ),
       ],
     );
   }

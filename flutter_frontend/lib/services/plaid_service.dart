@@ -1,47 +1,52 @@
 import 'package:plaid_flutter/plaid_flutter.dart';
-
-// import 'api_service.dart';
+import 'dart:async';
 
 class PlaidService {
-  // PlaidService({required this.apiService});
+  StreamSubscription<LinkSuccess>? _streamSuccess;
+  StreamSubscription<LinkExit>? _streamExit;
+  StreamSubscription<LinkEvent>? _streamEvent;
 
-  // final ApiService apiService;
+  void initialize({
+    required void Function(String publicToken) onSuccess,
+    required void Function(String message) onExit,
+  }) {
+    // 1. Listen to global streams provided by plaid_flutter
+    _streamSuccess = PlaidLink.onSuccess.listen((success) {
+      print('PLAID SUCCESS CALLBACK');
+      print('publicToken: ${success.publicToken}');
+      onSuccess(success.publicToken);
+    });
+
+    _streamExit = PlaidLink.onExit.listen((exit) {
+      final message = exit.error?.message ?? 'User exited Plaid without completing flow';
+      print('PLAID EXIT CALLBACK');
+      print(message);
+      onExit(message);
+    });
+
+    _streamEvent = PlaidLink.onEvent.listen((event) {
+      print('PLAID EVENT: ${event.name}');
+    });
+
+    print('PlaidService initialized with success and exit callbacks.');
+  }
 
   Future<void> openPlaidLink({required String linkToken}) async {
-    // final data = await apiService.createLinkToken();
-    // final linkToken = data['link_token'] as String?;
-
-    if ( linkToken.isEmpty) { //linkToken == null ||
-      throw Exception('No link_token returned from backend');
-    }
-
-    
-  
-    // PlaidLink.open(
-    //   configuration: LinkTokenConfiguration(
-    //     token: linkToken,
-    //   ),
-    //   onSuccess: (success) {
-    //     print('Plaid success: ${success.publicToken}');
-    //   },
-    //   onExit: (exit) {
-    //     print('Plaid exit: ${exit.error?.message ?? 'User exited'}');
-    //   },
-    //   onEvent: (event) {
-    //     print('Plaid event: ${event.name}');
-    //   },
-    // );
-
-
-    // 1. Set up your configuration
-    LinkTokenConfiguration configuration = LinkTokenConfiguration(
+    // 2. Create the configuration token handler
+    final configuration = LinkTokenConfiguration(
       token: linkToken,
     );
-
-    // 2. Initialize Plaid Link first
+    
+    // 3. Create the session first, then open
     await PlaidLink.create(configuration: configuration);
+    PlaidLink.open();
+  }
 
-    // 3. Open it separately
-    await PlaidLink.open();
+  void dispose() {
+    // 4. Clean up subscriptions when done
+    _streamSuccess?.cancel();
+    _streamExit?.cancel();
+    _streamEvent?.cancel();
   }
 }
+
