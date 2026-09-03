@@ -30,7 +30,7 @@ class HeaderView extends StatelessWidget {
             );
           },
           icon: const Icon(Icons.account_balance),
-          label: const Text('Connect account'),
+          label: const Text('test update state'),
         ),
         FilledButton.icon(
           onPressed: () async {
@@ -50,7 +50,7 @@ class HeaderView extends StatelessWidget {
             }
           },
           icon: const Icon(Icons.info_outline),
-          label: const Text('createLinkToken'),
+          label: const Text('should auto do this'),
         ),
         PlaidLinkView(),
       ],

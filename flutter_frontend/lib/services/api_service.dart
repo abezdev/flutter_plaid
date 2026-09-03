@@ -27,4 +27,18 @@ class ApiService {
 
     return jsonDecode(response.body);
   }
+
+  Future<Map<String, dynamic>>setAccessToken(String publicToken) async {
+    final response = await http.post(
+      Uri.parse('http://localhost:8000/api/set_access_token'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'public_token': publicToken}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to set access token: ${response.statusCode}');
+    }
+
+    return jsonDecode(response.body);
+  }
 }
